@@ -1,6 +1,6 @@
 var PositionModel = Backbone.Model.extend({
 
-	url: '/getStats',
+	url: '/api/positionQuery/getStats',
 
 	defaults: {
 		title: null,
