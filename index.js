@@ -38,6 +38,7 @@ app.post('/api/uploadfile', multipartMiddleware, dataUploadRoute.parseUploadedDa
 var positionQueryRoutes = express.Router();
 app.use('/api/positionQuery', positionQueryRoutes);
 require('./server/routes/positionQuery/positionQueryRoutes')(positionQueryRoutes);
+
 // app.get('/getStats', function(req, res) {
 //   new Position().where({
 //     position_name: req.query.name
@@ -46,7 +47,6 @@ require('./server/routes/positionQuery/positionQueryRoutes')(positionQueryRoutes
 //       console.log('No records for profile found.');
 //     } else {
 //       var positionID = position.attributes.id;
-      
 //       db.knex.from('eduMilestones')
 //       .innerJoin('profiles', 'eduMilestones.profile_id', 'profiles.id')
 //       .innerJoin('degrees', 'eduMilestones.degree_id', 'degrees.id')
