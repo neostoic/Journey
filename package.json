@@ -48,6 +48,7 @@
     "multiparty": "^4.1.2",
     "mysql": "^2.6.2",
     "nodemon": "^1.3.7",
+    "underscore": "^1.8.3",
     "util": "^0.10.3"
   }
 }
