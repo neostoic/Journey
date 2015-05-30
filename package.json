@@ -37,6 +37,7 @@
     "sinon": "^1.14.1"
   },
   "dependencies": {
+    "async": "^1.0.0",
     "bluebird": "^2.9.26",
     "body-parser": "^1.12.4",
     "bookshelf": "^0.8.1",
