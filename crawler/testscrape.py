@@ -1,11 +1,16 @@
-#sudo scrapy runspider testscrape.py -s USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36" -o test_data.json;
+# sudo scrapy runspider testscrape.py -s USER_AGENT="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36" -o test_data.json;
 
 import scrapy
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from random import randint
+from time import sleep
 
-start_urls = ['https://www.linkedin.com/pub/valerie-liang/33/269/489']
+start_urls = ['https://www.linkedin.com/in/gandalfhernandez',
+  'https://www.linkedin.com/in/pvatala',
+  'https://www.linkedin.com/in/tleef',
+  'https://www.linkedin.com/pub/jonathan-jengo/4/542/b07']
 
 class Person(scrapy.Item):
 	full_name = scrapy.Field()
@@ -25,8 +30,12 @@ class PersonScraper(CrawlSpider):
 	USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36"
 	name = 'personSpy'
 	allowed_domains = ['linkedin.com']
-	start_urls = ['https://www.linkedin.com/pub/valerie-liang/33/269/489']
-	rules = [Rule(SgmlLinkExtractor(allow=(r'pub/valerie-liang/33/269/489')), callback='parse_person', follow=False)]
+	start_urls = ['https://www.linkedin.com/in/gandalfhernandez',
+  'https://www.linkedin.com/in/pvatala',
+  'https://www.linkedin.com/in/tleef',
+  'https://www.linkedin.com/pub/jonathan-jengo/4/542/b07']
+	rules = [Rule(SgmlLinkExtractor(allow=(r'/in/gandalfhernandez|/in/tleef|/pub/jonathan-jengo/4/542/b07')), callback='parse_person', follow=False)]
+	urlCounter = 0
 
 	def parse_person(self, response):
 		person = Person()
@@ -40,7 +49,8 @@ class PersonScraper(CrawlSpider):
 		
 
 		#URL
-		person['url'] = start_urls[0]
+		person['url'] = start_urls[PersonScraper.urlCounter]
+		PersonScraper.urlCounter+=1
 
 		#PAST EXPERIENCES
 		person['past_experience_list'] = []
@@ -82,6 +92,8 @@ class PersonScraper(CrawlSpider):
 
 			#dates
 			dateList = experience.xpath('span/time/text()').extract()
+			if dateList == []:
+				dateList = [""]
 			date1 = dateList[0].encode("utf8")
 			date2 = dateList[1].encode("utf8")
 			tempExperience["start_date"] = date1
@@ -96,7 +108,7 @@ class PersonScraper(CrawlSpider):
 		person['educationList'] = []
 		educationsss = response.xpath("//div[@id='background-education']/div/div/div")
 
-
+		print("this many educations:", len(educationsss))
 		for education in educationsss:
 
 			#initialize education dictionary to be added to education list
@@ -124,13 +136,18 @@ class PersonScraper(CrawlSpider):
 			tempEducation["degree"] = degreeValue
 
 			degreeYears = education.xpath('span[@class="education-date"]/time/text()').extract()
-			time1 = degreeYears[0].encode("utf8")
-			time2 = degreeYears[1].encode("utf8")[-4:]
-			tempEducation["start_date"] = time1
-			tempEducation["end_date"] = time2
+			if degreeYears == []:
+				tempEducation["start_date"] = ""
+				tempEducation["end_date"] = ""
+			else:
+				time1 = degreeYears[0].encode("utf8")
+				time2 = degreeYears[1].encode("utf8")[-4:]
+				tempEducation["start_date"] = time1
+				tempEducation["end_date"] = time2
 
 			person['educationList'].append(tempEducation)
 
+		sleep(randint(1,3))
 
 
 		return person
