@@ -1,4 +1,4 @@
-Visit us at http://letsjourney.herokuapp.com
+Visit us at http://letsjourney.co
 # Journey
 
 
