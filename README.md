@@ -10,6 +10,8 @@ Visit us at http://letsjourney.herokuapp.com
 <li> Check out the profiles of individual people to see their timelines and how they got the job you want. </li>
 <li> Click "Get me there" and enter your current position to find people that went from your current job to your dream job. </li>
 
+![Journey](http://g.recordit.co/qzqKGJtdfw.gif)
+
 ## The data
 
 The data was obtained from LinkedIn using the Scrapy (https://github.com/scrapy/scrapy) Python module. 
